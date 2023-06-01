@@ -21,10 +21,10 @@
     "command": "node -r tsconfig-paths/register -r ts-node/register libs/command/src/main.ts",
     "command:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register libs/command/src/main.ts",
     "db:clean": "npm run command -- db clean",
-    "db:seed": "npm run command -- db seed",
+    "db:mock": "npm run command -- db mock",
     "db:debug": "npm run command:debug -- db",
     "mongo:drop": "npm run command -- mongo drop",
-    "mongo:seed": "npm run command -- mongo seed",
+    "mongo:mock": "npm run command -- mongo mock",
     "mongo:debug": "npm run command:debug -- mongo",
     "doc": "npx compodoc -p tsconfig.json -n \"Supnex Documentation\" -d ./docs -s"
   },

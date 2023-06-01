@@ -7,7 +7,24 @@
   "compilerOptions": {
     "webpack": true,
     "deleteOutDir": true,
-    "tsConfigPath": "apps/gateway/tsconfig.app.json"
+    "tsConfigPath": "apps/gateway/tsconfig.app.json",
+    "assets": ["**/*.proto"],
+    "plugins": [
+      {
+        "name": "@nestjs/swagger",
+        "options": {
+          "introspectComments": true,
+          "dtoFileNameSuffix": [".dto.ts", ".serializer.ts"]
+        }
+      },
+      {
+        "name": "@nestjs/graphql",
+        "options": {
+          "introspectComments": true,
+          "typeFileNameSuffix": [".dto.ts", ".serializer.ts"]
+        }
+      }
+    ]
   },
   "projects": {
     "gateway": {
@@ -53,6 +70,42 @@
       "sourceRoot": "apps/supnex/stocks/src",
       "compilerOptions": {
         "tsConfigPath": "apps/supnex/stocks/tsconfig.app.json"
+      }
+    },
+    "common": {
+      "type": "library",
+      "root": "libs/common",
+      "entryFile": "index",
+      "sourceRoot": "libs/common/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/common/tsconfig.lib.json"
+      }
+    },
+    "command": {
+      "type": "library",
+      "root": "libs/command",
+      "entryFile": "index",
+      "sourceRoot": "libs/command/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/command/tsconfig.lib.json"
+      }
+    },
+    "health": {
+      "type": "library",
+      "root": "libs/health",
+      "entryFile": "index",
+      "sourceRoot": "libs/health/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/health/tsconfig.lib.json"
+      }
+    },
+    "redis": {
+      "type": "library",
+      "root": "libs/redis",
+      "entryFile": "index",
+      "sourceRoot": "libs/redis/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/redis/tsconfig.lib.json"
       }
     }
   }
