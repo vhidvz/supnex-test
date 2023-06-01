@@ -8,3 +8,5 @@ export interface Material extends BaseInterface {
   category: Category;
   measurement: Measurement;
 }
+
+export type MaterialInterface = Material;
