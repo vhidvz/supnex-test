@@ -1,0 +1,9 @@
+.vscode
+
+./dist
+./docs
+
+./node_modules
+
+.eslintrc.js
+.prettierrc
