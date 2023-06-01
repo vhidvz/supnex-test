@@ -1,0 +1,44 @@
+syntax = "proto3";
+package suppliers;
+
+service SuppliersService {
+  rpc Count(CountFilter) returns (Total);
+
+  rpc Create(Supplier) returns (Supplier);
+
+  rpc Find(Filter) returns (Suppliers);
+  rpc FindById(UniqueFilter) returns (Supplier);
+
+  rpc UpdateById(UpdateSupplierUnique) returns (Supplier);
+}
+
+message Total { int64 count = 1; }
+
+message Filter {
+  string query = 1;
+  optional string projection = 2;
+  optional string pagination = 3;
+}
+message UniqueFilter {
+  string id = 1;
+  optional string projection = 2;
+}
+message CountFilter { string query = 1; }
+
+message UpdateSupplierUnique {
+  Supplier data = 1;
+  UniqueFilter filter = 2;
+}
+
+message Supplier {
+  // Base Interface
+  optional string id = 1;
+
+  optional string created_at = 2;
+  optional string updated_at = 3;
+
+  // Supplier Interface
+  string name = 50;
+}
+
+message Suppliers { repeated Supplier items = 1; }

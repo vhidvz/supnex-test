@@ -1,0 +1,51 @@
+syntax = "proto3";
+package materials;
+
+service MaterialsService {
+  rpc Count(CountFilter) returns (Total);
+
+  rpc Create(Material) returns (Material);
+
+  rpc Find(Filter) returns (Materials);
+  rpc FindById(UniqueFilter) returns (Material);
+
+  rpc UpdateById(UpdateMaterialUnique) returns (Material);
+}
+
+message Total { int64 count = 1; }
+
+message Filter {
+  string query = 1;
+  optional string projection = 2;
+  optional string pagination = 3;
+}
+message UniqueFilter {
+  string id = 1;
+  optional string projection = 2;
+}
+message CountFilter { string query = 1; }
+
+message UpdateMaterialUnique {
+  Material data = 1;
+  UniqueFilter filter = 2;
+}
+
+message Material {
+  // Base Interface
+  optional string id = 1;
+
+  optional string created_at = 2;
+  optional string updated_at = 3;
+
+  // Material Interface
+  string name = 50;
+  string category = 51;
+  optional Mesurment mesurment = 52;
+
+  message Mesurment {
+    string name = 1;
+    string symbol = 2;
+  }
+}
+
+message Materials { repeated Material items = 1; }

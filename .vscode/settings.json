@@ -1,0 +1,45 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "git.mergeEditor": true,
+  "docwriter.style": "Auto-detect",
+  "cSpell.words": [
+    "abacl",
+    "apikey",
+    "backoff",
+    "compodoc",
+    "dtos",
+    "fieldname",
+    "fullstacksjs",
+    "kafkajs",
+    "kavenegar",
+    "listify",
+    "metadatas",
+    "MINIO",
+    "nestjs",
+    "ntegral",
+    "opentelemetry",
+    "OTLP",
+    "pactum",
+    "proto",
+    "radash",
+    "setex",
+    "Supnex",
+    "Vahid",
+    "websockets",
+    "willsoto"
+  ],
+  "editor.tabCompletion": "on",
+  "diffEditor.codeLens": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/node_modules": true
+  },
+  "workspace.isHidden": true
+}

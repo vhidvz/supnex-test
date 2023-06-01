@@ -1,0 +1,93 @@
+version: '3.8'
+
+x-common: &common
+  build:
+    context: .
+  env_file:
+    - .env
+  networks:
+    - platform
+
+services:
+  gateway:
+    build:
+      args:
+        APP_NAME: gateway
+    ports:
+      - '3010:3010' # Rest
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  #######################
+  # MATERIALS SERVICE
+  #######################
+
+  service-materials:
+    container_name: service-materials
+    build:
+      args:
+        APP_NAME: service:materials
+    ports:
+      - '3050:3050' # Rest
+      - '5050:5050' # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  #######################
+  # SUPPLIERS SERVICES
+  #######################
+
+  service-suppliers:
+    container_name: service-suppliers
+    build:
+      args:
+        APP_NAME: service:suppliers
+    ports:
+      - '3051:3051' # Rest
+      - '5051:5051' # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  #######################
+  # PRODUCTS SERVICES
+  #######################
+
+  service-products:
+    container_name: service-products
+    build:
+      args:
+        APP_NAME: service:products
+    ports:
+      - '3052:3052' # Rest
+      - '5052:5052' # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+  #######################
+  # STOCKS SERVICES
+  #######################
+
+  service-stocks:
+    container_name: service-stocks
+    build:
+      args:
+        APP_NAME: service:stocks
+    ports:
+      - '3053:3053' # Rest
+      - '5053:5053' # gRPC
+    environment:
+      NODE_ENV: prod
+      SENTRY_DSN:
+    <<: *common
+
+networks:
+  platform:
+    driver: bridge

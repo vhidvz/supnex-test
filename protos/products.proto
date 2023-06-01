@@ -1,0 +1,49 @@
+syntax = "proto3";
+package products;
+
+service ProductsService {
+  rpc Count(CountFilter) returns (Total);
+
+  rpc Create(Product) returns (Product);
+
+  rpc Find(Filter) returns (Products);
+  rpc FindById(UniqueFilter) returns (Product);
+
+  rpc UpdateById(UpdateProductUnique) returns (Product);
+}
+
+message Total { int64 count = 1; }
+
+message Filter {
+  string query = 1;
+  optional string projection = 2;
+  optional string pagination = 3;
+}
+message UniqueFilter {
+  string id = 1;
+  optional string projection = 2;
+}
+message CountFilter { string query = 1; }
+
+message UpdateProductUnique {
+  Product data = 1;
+  UniqueFilter filter = 2;
+}
+
+message Product {
+  // Base Interface
+  optional string id = 1;
+
+  optional string created_at = 2;
+  optional string updated_at = 3;
+
+  // Product Interface
+  string supplier_id = 50;
+
+  string name = 51;
+  string category = 52;
+
+  int64 price = 53;
+}
+
+message Products { repeated Product items = 1; }

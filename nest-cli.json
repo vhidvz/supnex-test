@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/gateway/src",
+  "monorepo": true,
+  "root": "apps/gateway",
+  "compilerOptions": {
+    "webpack": true,
+    "deleteOutDir": true,
+    "tsConfigPath": "apps/gateway/tsconfig.app.json"
+  },
+  "projects": {
+    "gateway": {
+      "type": "application",
+      "root": "apps/gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/gateway/tsconfig.app.json"
+      }
+    },
+    "service:materials": {
+      "type": "application",
+      "root": "apps/supnex/materials",
+      "entryFile": "main",
+      "sourceRoot": "apps/supnex/materials/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/supnex/materials/tsconfig.app.json"
+      }
+    },
+    "service:suppliers": {
+      "type": "application",
+      "root": "apps/supnex/suppliers",
+      "entryFile": "main",
+      "sourceRoot": "apps/supnex/suppliers/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/supnex/suppliers/tsconfig.app.json"
+      }
+    },
+    "service:products": {
+      "type": "application",
+      "root": "apps/supnex/products",
+      "entryFile": "main",
+      "sourceRoot": "apps/supnex/products/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/supnex/products/tsconfig.app.json"
+      }
+    },
+    "service:stocks": {
+      "type": "application",
+      "root": "apps/supnex/stocks",
+      "entryFile": "main",
+      "sourceRoot": "apps/supnex/stocks/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/supnex/stocks/tsconfig.app.json"
+      }
+    }
+  }
+}
