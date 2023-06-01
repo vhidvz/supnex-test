@@ -40,9 +40,9 @@ message Material {
   // Material Interface
   string name = 50;
   string category = 51;
-  optional Mesurment mesurment = 52;
+  optional Measurement measurement = 52;
 
-  message Mesurment {
+  message Measurement {
     string name = 1;
     string symbol = 2;
   }
