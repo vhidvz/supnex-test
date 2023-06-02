@@ -1,3 +1,3 @@
-export * from './repository.core';
 export * from './service.core';
-export * from './options';
+export * from './provider.core';
+export * from './repository.core';

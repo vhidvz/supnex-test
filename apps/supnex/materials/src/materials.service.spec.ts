@@ -1,22 +1,34 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+require('dotenv').config();
+
+import { Material, MaterialSchema } from '@app/common/schemas';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MaterialsController } from './materials.controller';
+import { MONGO_CONFIG } from '@app/common/configs';
+import { MongooseModule } from '@nestjs/mongoose';
+
+import { MaterialsRepository } from './materials.repository';
 import { MaterialsService } from './materials.service';
 
-describe('MaterialsController', () => {
-  let materialsController: MaterialsController;
+describe('MaterialsService', () => {
+  let materialsService: MaterialsService;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      controllers: [MaterialsController],
-      providers: [MaterialsService],
+      imports: [
+        MongooseModule.forRoot(MONGO_CONFIG()),
+        MongooseModule.forFeature([
+          { name: Material.name, schema: MaterialSchema },
+        ]),
+      ],
+      providers: [MaterialsService, MaterialsRepository],
     }).compile();
 
-    materialsController = app.get<MaterialsController>(MaterialsController);
+    materialsService = app.get<MaterialsService>(MaterialsService);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(materialsController.getHello()).toBe('Hello World!');
+  describe('services', () => {
+    it('should return total number of materials', async () => {
+      expect(await materialsService.count({ query: {} })).toBeGreaterThan(0);
     });
   });
 });

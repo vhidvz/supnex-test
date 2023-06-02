@@ -11,7 +11,7 @@ export interface Pagination<T = any> {
 }
 
 export interface RawMethodInterface {
-  raw: () => RawFilterInterface;
+  raw?: () => RawFilterInterface;
 }
 
 export interface Filter<T = any> {
