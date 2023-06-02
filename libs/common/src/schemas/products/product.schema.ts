@@ -1,6 +1,7 @@
 import { ProductInterface } from '@app/common/interfaces';
+import { Prop, buildSchema } from '@typegoose/typegoose';
 import { Category } from '@app/common/enums';
-import { Prop } from '@typegoose/typegoose';
+import { Document } from 'mongoose';
 
 import { Schema } from '../base';
 
@@ -20,3 +21,6 @@ export class Product
   @Prop({ type: String, enum: Category })
   category: Category;
 }
+
+export type ProductDocument = Product & Document;
+export const ProductSchema = buildSchema(Product);

@@ -1,15 +1,15 @@
 syntax = "proto3";
-package materials;
+package products;
 
-service MaterialsService {
+service ProductsService {
   rpc Count(CountFilter) returns (Total);
 
-  rpc Create(Material) returns (Material);
+  rpc Create(Product) returns (Product);
 
-  rpc Find(Filter) returns (Materials);
-  rpc FindById(UniqueFilter) returns (Material);
+  rpc Find(Filter) returns (Products);
+  rpc FindById(UniqueFilter) returns (Product);
 
-  rpc UpdateById(UpdateMaterialUnique) returns (Material);
+  rpc UpdateById(UpdateProductUnique) returns (Product);
 }
 
 message Total { int64 count = 1; }
@@ -25,19 +25,19 @@ message UniqueFilter {
 }
 message CountFilter { string query = 1; }
 
-message UpdateMaterialUnique {
-  Material data = 1;
+message UpdateProductUnique {
+  Product data = 1;
   UniqueFilter filter = 2;
 }
 
-message Material {
+message Product {
   // Base Interface
   optional string id = 1;
 
   optional string created_at = 2;
   optional string updated_at = 3;
 
-  // Material Interface
+  // Product Interface
   string name = 50;
   string category = 51;
   optional Measurement measurement = 52;
@@ -48,4 +48,4 @@ message Material {
   }
 }
 
-message Materials { repeated Material items = 1; }
+message Products { repeated Product items = 1; }
