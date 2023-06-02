@@ -4,13 +4,13 @@ import {
   UseFilters,
   UseInterceptors,
   UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { CountFilterDto, FilterDto, UniqueFilterDto } from '@app/common/dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { TotalSerializer } from '@app/common/serializers';
+import { ValidationPipe } from '@app/common/pipes';
 import { Filter } from '@app/common/decorators';
 
 import { StockSerializer, StocksSerializer } from './serializers';

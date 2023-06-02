@@ -1,13 +1,10 @@
 import { MeasurementInterface } from '@app/common/interfaces';
 import { Exclude, Expose } from 'class-transformer';
-
-import { Serializer } from '../base';
+import { ObjectType } from '@nestjs/graphql';
 
 @Exclude()
-export class MeasurementSerializer
-  extends Serializer<MeasurementInterface>
-  implements MeasurementInterface
-{
+@ObjectType()
+export class MeasurementSerializer implements MeasurementInterface {
   @Expose()
   name: string;
 

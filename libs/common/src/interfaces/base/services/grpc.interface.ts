@@ -5,7 +5,7 @@ import {
   RawCountFilter as CountFilter,
   RawFilter as Filter,
 } from '../filters';
-import { Total } from '../index';
+import { Array, Total } from '../index';
 
 export interface Update<T, F> {
   data: T;
