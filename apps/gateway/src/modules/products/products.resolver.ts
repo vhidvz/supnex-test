@@ -6,16 +6,16 @@ import {
 } from '@nestjs/common';
 import {
   TotalSerializer,
-  MaterialSerializer,
-  MaterialsSerializer,
+  ProductSerializer,
+  ProductsSerializer,
 } from '@app/common/serializers';
 import { RateLimitInterceptor } from '@app/common/interceptors';
 import {
   CountFilterDto,
-  CreateMaterialDto,
+  CreateProductDto,
   FilterDto,
   UniqueFilterDto,
-  UpdateMaterialDto,
+  UpdateProductDto,
 } from '@app/common/dto';
 import { ParseMongoIdPipe, ValidationPipe } from '@app/common/pipes';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
@@ -25,55 +25,55 @@ import { Filter } from '@app/common/decorators';
 import { toRaw } from '@app/common/utils';
 import { lastValueFrom } from 'rxjs';
 
-import { MaterialsProvider } from './materials.provider';
+import { ProductsProvider } from './products.provider';
 
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
-@Resolver(() => MaterialSerializer)
+@Resolver(() => ProductSerializer)
 @UseInterceptors(RateLimitInterceptor)
 @UseInterceptors(
   ClassSerializerInterceptor,
   new GraphqlInterceptor({ version: true }),
 )
-export class MaterialsResolver {
-  constructor(private readonly provider: MaterialsProvider) {}
+export class ProductsResolver {
+  constructor(private readonly provider: ProductsProvider) {}
 
   @Query(() => TotalSerializer)
-  async countMaterial(
+  async countProduct(
     @Filter() @Args('filter') filter: CountFilterDto,
   ): Promise<TotalSerializer> {
     return await lastValueFrom(this.provider.service.count(toRaw(filter)));
   }
 
-  @Mutation(() => MaterialSerializer)
-  async createMaterial(
-    @Args('data', { type: () => CreateMaterialDto }) data: CreateMaterialDto,
-  ): Promise<MaterialSerializer> {
+  @Mutation(() => ProductSerializer)
+  async createProduct(
+    @Args('data', { type: () => CreateProductDto }) data: CreateProductDto,
+  ): Promise<ProductSerializer> {
     return await lastValueFrom(this.provider.service.create(data));
   }
 
-  @Query(() => MaterialsSerializer)
-  async findMaterials(
+  @Query(() => ProductsSerializer)
+  async findProducts(
     @Filter() @Args('filter') filter: FilterDto,
-  ): Promise<MaterialsSerializer> {
+  ): Promise<ProductsSerializer> {
     return await lastValueFrom(this.provider.service.find(toRaw(filter)));
   }
 
-  @Query(() => MaterialSerializer)
-  async findMaterial(
+  @Query(() => ProductSerializer)
+  async findProduct(
     @Args('id', ParseMongoIdPipe) id: string,
     @Filter() filter: Omit<UniqueFilterDto, 'id'>,
-  ): Promise<MaterialSerializer> {
+  ): Promise<ProductSerializer> {
     Object.assign(filter, { id });
     return await lastValueFrom(this.provider.service.findById(toRaw(filter)));
   }
 
-  @Mutation(() => MaterialSerializer)
-  async updateMaterial(
-    @Args('data') data: UpdateMaterialDto,
+  @Mutation(() => ProductSerializer)
+  async updateProduct(
+    @Args('data') data: UpdateProductDto,
     @Args('id', ParseMongoIdPipe) id: string,
     @Filter() filter: Omit<UniqueFilterDto, 'id'>,
-  ): Promise<MaterialSerializer> {
+  ): Promise<ProductSerializer> {
     Object.assign(filter, { id });
     return await lastValueFrom(
       this.provider.service.updateById({ data, filter: toRaw(filter) }),

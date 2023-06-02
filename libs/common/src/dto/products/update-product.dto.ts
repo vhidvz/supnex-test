@@ -8,9 +8,11 @@ import {
 } from 'class-validator';
 import { ProductInterface } from '@app/common/interfaces';
 import { Category } from '@app/common/enums';
+import { InputType } from '@nestjs/graphql';
 
 import { UpdateDto } from '../base';
 
+@InputType()
 export class UpdateProductDto
   extends UpdateDto<ProductInterface>
   implements ProductInterface
