@@ -4,7 +4,7 @@ import { Exclude, Expose } from 'class-transformer';
 import { Serializer } from '../base';
 
 @Exclude()
-export class Measurement
+export class MeasurementSerializer
   extends Serializer<MeasurementInterface>
   implements MeasurementInterface
 {

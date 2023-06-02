@@ -14,16 +14,16 @@ export interface RawMethodInterface {
   raw: () => RawFilterInterface;
 }
 
-export interface Filter<T = any> extends RawMethodInterface {
+export interface Filter<T = any> {
   query: Query<T>;
   projection?: Projection<T>;
   pagination?: Pagination<T>;
 }
-export type CountFilter<T = any> = Pick<Filter<T>, 'query' | 'raw'>;
+export type CountFilter<T = any> = Pick<Filter<T>, 'query'>;
 export type UniqueFilter<T = any> = {
   id: string;
   projection?: Projection<T>;
-} & RawMethodInterface;
+};
 
 export type FilterInterface<T = any> = Filter<T>;
 export type CountFilterInterface<T = any> = CountFilter<T>;

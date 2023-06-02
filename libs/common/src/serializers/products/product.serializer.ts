@@ -5,7 +5,7 @@ import { Category } from '@app/common/enums';
 import { Serializer } from '../base';
 
 @Exclude()
-export class Product
+export class ProductSerializer
   extends Serializer<ProductInterface>
   implements ProductInterface
 {

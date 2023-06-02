@@ -1,11 +1,12 @@
-import { MaterialInterface, Measurement } from '@app/common/interfaces';
-import { Exclude, Expose } from 'class-transformer';
+import { MaterialInterface } from '@app/common/interfaces';
+import { Exclude, Expose, Type } from 'class-transformer';
 import { Category } from '@app/common/enums';
 
+import { MeasurementSerializer } from './measurement.serializer';
 import { Serializer } from '../base';
 
 @Exclude()
-export class Material
+export class MaterialSerializer
   extends Serializer<MaterialInterface>
   implements MaterialInterface
 {
@@ -16,5 +17,6 @@ export class Material
   category: Category;
 
   @Expose()
-  measurement: Measurement;
+  @Type(() => MeasurementSerializer)
+  measurement: MeasurementSerializer;
 }

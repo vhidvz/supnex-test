@@ -82,7 +82,6 @@ services:
         APP_NAME: service:stocks
     ports:
       - '3053:3053' # Rest
-      - '5053:5053' # gRPC
     environment:
       NODE_ENV: prod
       SENTRY_DSN:

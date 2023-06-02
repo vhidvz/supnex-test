@@ -9,3 +9,14 @@ export const toJSON = (value: any) => {
     return value;
   }
 };
+
+export const toRaw = (obj: { [x: string]: any }): any => {
+  const raw: { [x: string]: string } = {};
+
+  for (const [key, value] of Object.entries(obj)) {
+    raw[key] = JSON.stringify(value);
+    if (!raw[key]) delete raw[key];
+  }
+
+  return raw;
+};

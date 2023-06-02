@@ -1,18 +1,19 @@
-import { OneFilter, Projection, Query } from '@app/common/interfaces';
-import { IsNotEmpty, IsObject, IsOptional } from 'class-validator';
+import { IsMongoId, IsNotEmpty, IsObject, IsOptional } from 'class-validator';
+import { Projection, UniqueFilter } from '@app/common/interfaces';
 import { Field, InputType } from '@nestjs/graphql';
-import { RawMethod } from '@app/common/classes';
+import { RawMethod } from 'libs/common/classes';
 import { Transform } from 'class-transformer';
 import GraphQLJSON from 'graphql-type-json';
 import { toJSON } from '@app/common/utils';
 
 @InputType()
-export class OneFilterDto<T = any> extends RawMethod implements OneFilter<T> {
-  @IsObject()
+export class UniqueFilterDto<T = any>
+  extends RawMethod
+  implements UniqueFilter<T>
+{
+  @IsMongoId()
   @IsNotEmpty()
-  @Field(() => GraphQLJSON)
-  @Transform(({ value }) => toJSON(value))
-  query: Query<T>;
+  id: string;
 
   @IsObject()
   @IsOptional()

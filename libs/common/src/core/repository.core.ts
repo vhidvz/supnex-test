@@ -38,8 +38,9 @@ export class Repository<
 
   public async updateById(
     filter: UniqueFilter<Entity>,
-    update: UpdateDto,
+    update: UpdateDto & { updated_at?: Date },
   ): Promise<Document & Entity> {
+    update.updated_at = update.updated_at ?? new Date();
     return await this.model
       .findByIdAndUpdate(filter.id, { ...update }, { new: true })
       .select(filter.projection)

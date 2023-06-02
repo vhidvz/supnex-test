@@ -1,6 +1,7 @@
 import { MaterialInterface } from '@app/common/interfaces';
+import { Prop, buildSchema } from '@typegoose/typegoose';
 import { Category } from '@app/common/enums';
-import { Prop } from '@typegoose/typegoose';
+import { Document } from 'mongoose';
 
 import { Measurement } from './measurement.schema';
 import { Schema } from '../base';
@@ -18,3 +19,6 @@ export class Material
   @Prop({ type: Measurement, required: true })
   measurement: Measurement;
 }
+
+export type MaterialDocument = Material & Document;
+export const MaterialSchema = buildSchema(Material);
