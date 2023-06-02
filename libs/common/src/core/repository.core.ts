@@ -1,28 +1,27 @@
+import {
+  CreateDto as BaseCreateDto,
+  UpdateDto as BaseUpdateDto,
+} from '@app/common/dto';
 import type { Document, Model } from 'mongoose';
 
-import { CreateDto as BaseCreateDto, UpdateDto as BaseUpdateDto } from '../dto';
-import type { CountFilter, Filter, OneFilter } from '../interfaces';
+import { CountFilter, Filter, UniqueFilter } from '../interfaces';
 
 export class Repository<
-  Schema,
-  CreateDto = BaseCreateDto<Schema>,
-  UpdateDto = BaseUpdateDto<Schema>,
+  Entity,
+  CreateDto = BaseCreateDto<Entity>,
+  UpdateDto = BaseUpdateDto<Entity>,
 > {
-  constructor(protected readonly model: Model<Document & Schema>) {}
+  constructor(protected readonly model: Model<Document & Entity>) {}
 
-  public async count(filter: CountFilter<Schema>): Promise<number> {
+  public async count(filter: CountFilter<Entity>): Promise<number> {
     return await this.model.countDocuments(filter.query).exec();
   }
 
-  public async create(createDto: CreateDto): Promise<Document & Schema> {
+  public async create(createDto: CreateDto): Promise<Document & Entity> {
     return await this.model.create({ ...createDto });
   }
 
-  public async findOne(filter: OneFilter<Schema>): Promise<Document & Schema> {
-    return await this.model.findOne(filter.query, filter.projection).exec();
-  }
-
-  public async find(filter: Filter<Schema>): Promise<(Document & Schema)[]> {
+  public async find(filter: Filter<Entity>): Promise<(Document & Entity)[]> {
     return await this.model
       .find(filter.query, filter.projection)
       .skip(filter.pagination?.skip)
@@ -31,16 +30,18 @@ export class Repository<
       .exec();
   }
 
-  public async findById(filter: OneFilter<Schema>): Promise<Document & Schema> {
-    return await this.model.findOne(filter.query, filter.projection).exec();
+  public async findById(
+    filter: UniqueFilter<Entity>,
+  ): Promise<Document & Entity> {
+    return await this.model.findById(filter.id, filter.projection).exec();
   }
 
   public async updateById(
-    filter: OneFilter<Schema>,
+    filter: UniqueFilter<Entity>,
     update: UpdateDto,
-  ): Promise<Document & Schema> {
+  ): Promise<Document & Entity> {
     return await this.model
-      .findOneAndUpdate(filter.query, { ...update }, { new: true })
+      .findByIdAndUpdate(filter.id, { ...update }, { new: true })
       .select(filter.projection)
       .exec();
   }

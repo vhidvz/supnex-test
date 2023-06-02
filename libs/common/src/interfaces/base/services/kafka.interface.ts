@@ -12,6 +12,8 @@ export interface Options {
   headers?: Record<string, any>;
 }
 
+export type KafkaServiceOptions = Options;
+
 export interface KafkaService<T> {
   count: (filter: CountFilter, options?: Options) => Observable<Total>;
 
