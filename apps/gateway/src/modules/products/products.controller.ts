@@ -28,8 +28,8 @@ import { RateLimitInterceptor } from '@app/common/interceptors';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { Filter } from '@app/common/decorators';
+import { lastValueFrom, map } from 'rxjs';
 import { toRaw } from '@app/common/utils';
-import { lastValueFrom } from 'rxjs';
 
 import { ProductsProvider } from './products.provider';
 
@@ -48,18 +48,35 @@ export class ProductsController {
   @Get('count')
   @ApiQuery({ type: CountFilterDto, required: false })
   async count(@Filter() filter: CountFilterDto): Promise<TotalSerializer> {
-    return await lastValueFrom(this.provider.service.count(toRaw(filter)));
+    return await lastValueFrom(
+      this.provider.service
+        .count(toRaw(filter))
+        .pipe(map((res) => ({ count: Number(res.count) }))),
+    );
   }
 
   @Post()
   async create(@Body() data: CreateProductDto): Promise<ProductSerializer> {
-    return await lastValueFrom(this.provider.service.create(data));
+    return await lastValueFrom(
+      this.provider.service
+        .create(data)
+        .pipe(map((res) => ({ ...res, price: Number(res.price) }))),
+    );
   }
 
   @Get()
   @ApiQuery({ type: FilterDto, required: false })
   async find(@Filter() filter: FilterDto): Promise<ProductsSerializer> {
-    return await lastValueFrom(this.provider.service.find(toRaw(filter)));
+    return await lastValueFrom(
+      this.provider.service.find(toRaw(filter)).pipe(
+        map((res) => ({
+          items: res.items.map((item) => ({
+            ...item,
+            price: Number(item.price),
+          })),
+        })),
+      ),
+    );
   }
 
   @Get(':id')
@@ -70,7 +87,11 @@ export class ProductsController {
     @Param('id', ParseMongoIdPipe) id: string,
   ): Promise<ProductSerializer> {
     Object.assign(filter, { id });
-    return await lastValueFrom(this.provider.service.findById(toRaw(filter)));
+    return await lastValueFrom(
+      this.provider.service
+        .findById(toRaw(filter))
+        .pipe(map((res) => ({ ...res, price: Number(res.price) }))),
+    );
   }
 
   @Patch(':id')
@@ -83,7 +104,9 @@ export class ProductsController {
   ): Promise<ProductSerializer> {
     Object.assign(filter, { id });
     return await lastValueFrom(
-      this.provider.service.updateById({ data, filter: toRaw(filter) }),
+      this.provider.service
+        .updateById({ data, filter: toRaw(filter) })
+        .pipe(map((res) => ({ ...res, price: Number(res.price) }))),
     );
   }
 }

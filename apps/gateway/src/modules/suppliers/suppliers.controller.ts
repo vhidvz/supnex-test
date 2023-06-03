@@ -28,8 +28,8 @@ import { RateLimitInterceptor } from '@app/common/interceptors';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { Filter } from '@app/common/decorators';
+import { lastValueFrom, map } from 'rxjs';
 import { toRaw } from '@app/common/utils';
-import { lastValueFrom } from 'rxjs';
 
 import { SuppliersProvider } from './suppliers.provider';
 
@@ -48,7 +48,11 @@ export class SuppliersController {
   @Get('count')
   @ApiQuery({ type: CountFilterDto, required: false })
   async count(@Filter() filter: CountFilterDto): Promise<TotalSerializer> {
-    return await lastValueFrom(this.provider.service.count(toRaw(filter)));
+    return await lastValueFrom(
+      this.provider.service
+        .count(toRaw(filter))
+        .pipe(map((res) => ({ count: Number(res.count) }))),
+    );
   }
 
   @Post()

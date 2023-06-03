@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 
-import { GatewayModule } from './../src/gateway.module';
+import { GatewayModule } from '../../src/gateway.module';
 
 describe('GatewayController (e2e)', () => {
   let app: INestApplication;
@@ -16,7 +16,9 @@ describe('GatewayController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer()).get('/').expect(404);
+  it('/materials/count (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/materials/count')
+      .expect(200, { count: 3 });
   });
 });

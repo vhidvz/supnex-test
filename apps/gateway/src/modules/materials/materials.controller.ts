@@ -28,8 +28,8 @@ import { RateLimitInterceptor } from '@app/common/interceptors';
 import { SentryInterceptor } from '@ntegral/nestjs-sentry';
 import { AllExceptionsFilter } from '@app/common/filters';
 import { Filter } from '@app/common/decorators';
+import { lastValueFrom, map } from 'rxjs';
 import { toRaw } from '@app/common/utils';
-import { lastValueFrom } from 'rxjs';
 
 import { MaterialsProvider } from './materials.provider';
 
@@ -48,7 +48,11 @@ export class MaterialsController {
   @Get('count')
   @ApiQuery({ type: CountFilterDto, required: false })
   async count(@Filter() filter: CountFilterDto): Promise<TotalSerializer> {
-    return await lastValueFrom(this.provider.service.count(toRaw(filter)));
+    return await lastValueFrom(
+      this.provider.service
+        .count(toRaw(filter))
+        .pipe(map((res) => ({ count: Number(res.count) }))),
+    );
   }
 
   @Post()
@@ -66,8 +70,8 @@ export class MaterialsController {
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: OmitType(UniqueFilterDto, ['id']), required: false })
   async findById(
-    @Filter() filter: UniqueFilterDto,
     @Param('id', ParseMongoIdPipe) id: string,
+    @Filter() filter: Omit<UniqueFilterDto, 'id'>,
   ): Promise<MaterialSerializer> {
     Object.assign(filter, { id });
     return await lastValueFrom(this.provider.service.findById(toRaw(filter)));
