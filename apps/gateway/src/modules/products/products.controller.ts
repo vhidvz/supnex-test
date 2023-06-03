@@ -58,7 +58,7 @@ export class ProductsController {
 
   @Get()
   @ApiQuery({ type: FilterDto, required: false })
-  async findMany(@Filter() filter: FilterDto): Promise<ProductsSerializer> {
+  async find(@Filter() filter: FilterDto): Promise<ProductsSerializer> {
     return await lastValueFrom(this.provider.service.find(toRaw(filter)));
   }
 

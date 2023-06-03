@@ -1,38 +1,52 @@
-import {
-  CreateDto as BaseCreateDto,
-  UpdateDto as BaseUpdateDto,
-} from '@app/common/dto';
 import { ClientKafka } from '@nestjs/microservices';
-import { Observable, lastValueFrom } from 'rxjs';
+import { OnModuleInit } from '@nestjs/common';
 
 import {
-  Base,
   KafkaServiceInterface,
-  Options,
   RawUniqueFilter as UniqueFilter,
   RawCountFilter as CountFilter,
   RawFilter as Filter,
   Total,
+  KafkaObj,
 } from '../interfaces';
 
-export class Provider<
-  Entity,
-  CreateDto = BaseCreateDto<Entity>,
-  UpdateDto = BaseUpdateDto<Entity>,
-> implements KafkaServiceInterface<Base>
+export class Provider<Entity>
+  implements KafkaServiceInterface<Entity>, OnModuleInit
 {
   constructor(
     private readonly topic: string,
     protected readonly client: ClientKafka,
   ) {}
 
-  count: (filter: CountFilter, options?: Options) => Observable<Total>;
-  create: (data: CreateDto, options?: Options) => Observable<Entity>;
-  find: (filter: Filter, options?: Options) => Observable<Entity[]>;
-  findById: (filter: UniqueFilter, options?: Options) => Observable<Entity>;
-  updateById: (
-    data: Entity,
-    filter: UniqueFilter,
-    options?: Options,
-  ) => Observable<Entity>;
+  async onModuleInit() {
+    this.client.subscribeToResponseOf(`${this.topic}.count`);
+    this.client.subscribeToResponseOf(`${this.topic}.create`);
+    this.client.subscribeToResponseOf(`${this.topic}.find`);
+    this.client.subscribeToResponseOf(`${this.topic}.findById`);
+    this.client.subscribeToResponseOf(`${this.topic}.updateById`);
+
+    await this.client.connect();
+  }
+
+  count(filter: CountFilter): KafkaObj<Total> {
+    return this.client.send(`${this.topic}.count`, { value: filter });
+  }
+
+  create(data: Entity): KafkaObj<Entity> {
+    return this.client.send(`${this.topic}.create`, { value: data });
+  }
+
+  find(filter: Filter): KafkaObj<Entity[]> {
+    return this.client.send(`${this.topic}.find`, { value: filter });
+  }
+
+  findById(filter: UniqueFilter): KafkaObj<Entity> {
+    return this.client.send(`${this.topic}.findById`, { value: filter });
+  }
+
+  updateById(data: Entity, filter: UniqueFilter): KafkaObj<Entity> {
+    return this.client.send(`${this.topic}.updateById`, {
+      value: { data, filter },
+    });
+  }
 }

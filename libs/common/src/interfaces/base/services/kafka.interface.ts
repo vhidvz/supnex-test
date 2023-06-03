@@ -1,3 +1,4 @@
+import { KafkaSerializer } from '@app/common/serializers';
 import { Observable } from 'rxjs';
 
 import {
@@ -7,26 +8,24 @@ import {
 } from '../filters';
 import { Total } from '../index';
 
-export interface Options {
+interface Options {
   key?: string;
   headers?: Record<string, any>;
 }
 
 export type KafkaServiceOptions = Options;
 
+export type KafkaObj<T> = Observable<KafkaSerializer<T>>;
+
 export interface KafkaService<T> {
-  count: (filter: CountFilter, options?: Options) => Observable<Total>;
+  count: (filter: CountFilter, options?: Options) => KafkaObj<Total>;
 
-  create: (data: T, options?: Options) => Observable<T>;
+  create: (data: T, options?: Options) => KafkaObj<T>;
 
-  find: (filter: Filter, options?: Options) => Observable<Array<T>>;
-  findById: (filter: UniqueFilter, options?: Options) => Observable<T>;
+  find: (filter: Filter, options?: Options) => KafkaObj<Array<T>>;
+  findById: (filter: UniqueFilter, options?: Options) => KafkaObj<T>;
 
-  updateById: (
-    data: T,
-    filter: UniqueFilter,
-    options?: Options,
-  ) => Observable<T>;
+  updateById: (data: T, filter: UniqueFilter, options?: Options) => KafkaObj<T>;
 }
 
 export type KafkaServiceInterface<T> = KafkaService<T>;

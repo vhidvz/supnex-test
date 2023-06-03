@@ -11,16 +11,16 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import {
-  SupplierSerializer,
-  SuppliersSerializer,
+  StockSerializer,
+  StocksSerializer,
   TotalSerializer,
 } from '@app/common/serializers';
 import {
   CountFilterDto,
-  CreateSupplierDto,
+  CreateStockDto,
   FilterDto,
   UniqueFilterDto,
-  UpdateSupplierDto,
+  UpdateStockDto,
 } from '@app/common/dto';
 import { ApiParam, ApiQuery, ApiTags, OmitType } from '@nestjs/swagger';
 import { ParseMongoIdPipe, ValidationPipe } from '@app/common/pipes';
@@ -31,10 +31,10 @@ import { Filter } from '@app/common/decorators';
 import { toRaw } from '@app/common/utils';
 import { lastValueFrom } from 'rxjs';
 
-import { SuppliersProvider } from './suppliers.provider';
+import { StocksProvider } from './stocks.provider';
 
-@ApiTags('suppliers')
-@Controller('suppliers')
+@ApiTags('stocks')
+@Controller('stocks')
 @UsePipes(ValidationPipe)
 @UseFilters(AllExceptionsFilter)
 @UseInterceptors(RateLimitInterceptor)
@@ -42,24 +42,26 @@ import { SuppliersProvider } from './suppliers.provider';
   ClassSerializerInterceptor,
   new SentryInterceptor({ version: true }),
 )
-export class SuppliersController {
-  constructor(private readonly provider: SuppliersProvider) {}
+export class StocksController {
+  constructor(private readonly provider: StocksProvider) {}
 
   @Get('count')
   @ApiQuery({ type: CountFilterDto, required: false })
   async count(@Filter() filter: CountFilterDto): Promise<TotalSerializer> {
-    return await lastValueFrom(this.provider.service.count(toRaw(filter)));
+    return (await lastValueFrom(this.provider.count(toRaw(filter)))).value;
   }
 
   @Post()
-  async create(@Body() data: CreateSupplierDto): Promise<SupplierSerializer> {
-    return await lastValueFrom(this.provider.service.create(data));
+  async create(@Body() data: CreateStockDto): Promise<StockSerializer> {
+    return (await lastValueFrom(this.provider.create(data))).value;
   }
 
   @Get()
   @ApiQuery({ type: FilterDto, required: false })
-  async find(@Filter() filter: FilterDto): Promise<SuppliersSerializer> {
-    return await lastValueFrom(this.provider.service.find(toRaw(filter)));
+  async find(@Filter() filter: FilterDto): Promise<StocksSerializer> {
+    return {
+      items: (await lastValueFrom(this.provider.find(toRaw(filter)))).value,
+    };
   }
 
   @Get(':id')
@@ -68,22 +70,21 @@ export class SuppliersController {
   async findById(
     @Filter() filter: UniqueFilterDto,
     @Param('id', ParseMongoIdPipe) id: string,
-  ): Promise<SupplierSerializer> {
+  ): Promise<StockSerializer> {
     Object.assign(filter, { id });
-    return await lastValueFrom(this.provider.service.findById(toRaw(filter)));
+    return (await lastValueFrom(this.provider.findById(toRaw(filter)))).value;
   }
 
   @Patch(':id')
   @ApiParam({ type: String, name: 'id', required: true })
   @ApiQuery({ type: OmitType(UniqueFilterDto, ['id']), required: false })
   async updateById(
-    @Body() data: UpdateSupplierDto,
+    @Body() data: UpdateStockDto,
     @Filter() filter: UniqueFilterDto,
     @Param('id', ParseMongoIdPipe) id: string,
-  ): Promise<SupplierSerializer> {
+  ): Promise<StockSerializer> {
     Object.assign(filter, { id });
-    return await lastValueFrom(
-      this.provider.service.updateById({ data, filter: toRaw(filter) }),
-    );
+    return (await lastValueFrom(this.provider.updateById(data, toRaw(filter))))
+      .value;
   }
 }

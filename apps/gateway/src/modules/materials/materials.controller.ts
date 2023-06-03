@@ -58,7 +58,7 @@ export class MaterialsController {
 
   @Get()
   @ApiQuery({ type: FilterDto, required: false })
-  async findMany(@Filter() filter: FilterDto): Promise<MaterialsSerializer> {
+  async find(@Filter() filter: FilterDto): Promise<MaterialsSerializer> {
     return await lastValueFrom(this.provider.service.find(toRaw(filter)));
   }
 
