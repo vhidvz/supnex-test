@@ -1,6 +1,6 @@
 # Supnex Test
 
-This is for the requested exam of supnex group.
+This is for the requested exam of the supnex group.
 
 | \*  | Micro     | Type             | Port | Command                         |
 | --- | --------- | ---------------- | ---- | ------------------------------- |
